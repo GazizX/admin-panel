@@ -1,4 +1,3 @@
-import {LoginForm} from "@features/auth"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useUnit } from "effector-react";
 import { $token } from "../features/auth/model/auth";
@@ -6,6 +5,7 @@ import HomePage from "../pages/home/HomePage";
 import Layout from "../pages/layout/Layout";
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router";
+import LoginPage from "../pages/login/LoginPage";
 
 const theme = createTheme({
   palette: {
@@ -33,7 +33,7 @@ function App() {
     <>
     <ThemeProvider theme={theme}>
       <Routes>
-        <Route path="/login" element={<LoginForm/>}/>
+        <Route path="/login" element={<LoginPage/>}/>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           {/* <Route path="/user/create" element={<UserPage />} />

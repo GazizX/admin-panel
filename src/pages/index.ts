@@ -1,0 +1,5 @@
+export {CreatePage} from './create-user/CreatePage'
+export {HomePage} from './home/HomePage'
+export {LoginPage} from './login/LoginPage'
+export {EditPage} from './edit-user/EditPage'
+export {Layout} from './layout/Layout'

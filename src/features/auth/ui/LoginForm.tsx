@@ -1,23 +1,31 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import submitLogin from "../lib/loginSubmitting";
-import LoginSchema from "@shared";
-import { Auth } from "@entities";
+import LoginSchema from '@shared/validation';
+import Auth from "@entities/auth";
 import { FormControl, Input, InputLabel, Typography, Button, CircularProgress } from "@mui/material";
 import styles from "./LoginForm.module.css"
-import { $error, $isLoading } from "../model/auth";
+import { loginFx, $authError, $isAuthenticated, loginFormSubmit } from "@features/auth/model";
 import { useUnit } from 'effector-react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const initialValues: Auth = { email: '', password: '' }
 
 export function LoginForm() {
-    const isLoading = useUnit($isLoading);
-    const error = useUnit($error);
+    const isLoading = useUnit(loginFx.pending)
+    const authError = useUnit($authError)
+    const isAuthenticated = useUnit($isAuthenticated)
+    const navigate = useNavigate()
+    useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
     return(
         <Formik
         initialValues={initialValues}
         validationSchema={LoginSchema}   
-        onSubmit={submitLogin}>
-            {({errors, touched}) => (
+        onSubmit={loginFormSubmit}>
+            {({errors, touched, isSubmitting}) => (
                 <Form className={styles.formContainer}>
                     <Typography variant="h4" component="h1" textAlign="center" color="primary">Log In</Typography>
                     <FormControl>
@@ -45,8 +53,8 @@ export function LoginForm() {
                         />
                         <ErrorMessage name="password" component="div" className={styles.errorMessage} />
                     </FormControl>
-                    {error && <Typography color="error" className={styles.errorMessage}>{error}</Typography>}
-                    <Button variant="outlined" disabled={isLoading} type="submit">
+                    {authError && <Typography color="error" className={styles.errorMessage}>{authError}</Typography>}
+                    <Button variant="outlined" disabled={isSubmitting || isLoading} type="submit">
                         {isLoading ? <CircularProgress size={24} /> : 'SUBMIT'}
                     </Button>
                 </Form>

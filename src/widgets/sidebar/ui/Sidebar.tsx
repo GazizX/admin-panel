@@ -1,7 +1,13 @@
 import { Box, Button, Typography } from "@mui/material";
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import styles from './SideBar.module.css'
+import { useNavigate } from "react-router";
 export function Sidebar() {
+    const navigate = useNavigate()
+    const handleAdd = () => {
+        console.log("нажал")
+        navigate('/user/create')
+    }
     return(
         <Box 
             className={styles.sidebarContainer}
@@ -11,7 +17,7 @@ export function Sidebar() {
             alignItems="center"
             sx={{borderRight: "1px solid #673ab7"}}
         >
-            <Button sx={{display: "flex", flexDirection: "column"}}>
+            <Button sx={{display: "flex", flexDirection: "column"}} onClick={() => handleAdd()}>
                 <Typography component="p" fontWeight="700" fontSize={25}>Add<br/>user</Typography>
                 <PersonAddAltIcon fontSize="large"/>
             </Button>

@@ -1,11 +1,9 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useUnit } from "effector-react";
-import { $token } from "../features/auth/model/auth";
-import HomePage from "../pages/home/HomePage";
-import Layout from "../pages/layout/Layout";
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router";
-import LoginPage from "../pages/login/LoginPage";
+import { LoginPage, Layout, HomePage, CreatePage, EditPage } from '@pages/';
+import { $isAuthenticated, appStarted, getAuthUserFx } from '@features/auth/model';
 
 const theme = createTheme({
   palette: {
@@ -19,16 +17,26 @@ const theme = createTheme({
 });
 
 function App() {
-  const token = useUnit($token)
+  const isAuthenticated = useUnit($isAuthenticated)
+  const initApp = useUnit(appStarted)
+  const isCheckingAuth = useUnit(getAuthUserFx.pending)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (token) {
-      navigate('/')
-    } else {
-      navigate('/login')
+    initApp();
+  }, [initApp]);
+
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      if (isAuthenticated) {
+        if (window.location.pathname === '/login') {
+          navigate('/');
+        }
+      } else {
+        navigate('/login');
+      }
     }
-  }, [token, navigate])
+  }, [isAuthenticated, isCheckingAuth, navigate]);
   return (
     <>
     <ThemeProvider theme={theme}>
@@ -36,8 +44,8 @@ function App() {
         <Route path="/login" element={<LoginPage/>}/>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/user/create" element={<UserPage />} />
-          <Route path="/user/edit" element={<UserPage />} /> */}
+          <Route path="/user/create" element={<CreatePage/>}/>
+          <Route path="/user/:id" element={<EditPage />} />
         </Route>
       </Routes>
     </ThemeProvider>

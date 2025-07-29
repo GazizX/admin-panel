@@ -1,7 +1,7 @@
-import { Button } from "@mui/material";
+import { UserTable } from "@features/user";
 
-export default function HomePage() {
+export function HomePage() {   
     return(
-        <Button></Button>
+        <UserTable/>
     )
 }

@@ -1,7 +1,7 @@
 import { LoginForm } from "@features/auth";
 
 
-export default function LoginPage() {
+export function LoginPage() {
     return(
         <>
             <LoginForm/>

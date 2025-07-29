@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router";
 import { LoginPage, Layout, HomePage, CreatePage, EditPage } from '@pages/';
 import { $isAuthenticated, appStarted, getAuthUserFx } from '@features/auth/model';
+import { navigateTo } from '@features/user/model/users';
 
 const theme = createTheme({
   palette: {
@@ -23,8 +24,15 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    return navigateTo.watch((path) => {
+      navigate(path);
+    });
+  }, [navigate])
+
+  useEffect(() => {
     initApp();
   }, [initApp]);
+
 
   useEffect(() => {
     if (!isCheckingAuth) {
@@ -45,7 +53,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/user/create" element={<CreatePage/>}/>
-          <Route path="/user/:id" element={<EditPage />} />
+          <Route path="/user/edit/:id" element={<EditPage />} />
         </Route>
       </Routes>
     </ThemeProvider>

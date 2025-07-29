@@ -3,6 +3,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Typography, Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
 import { useUnit } from "effector-react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export function UserTable() {
     const users = useUnit($users);
@@ -10,7 +11,7 @@ export function UserTable() {
     const deleteUser = useUnit(deleteUserFx);
     const isLoading = useUnit(getUsersFx.pending);
     const isDeleting = useUnit(deleteUserFx.pending);
-
+    const navigate = useNavigate()
     useEffect(() => {
         getUsers();
     }, [getUsers]);
@@ -20,6 +21,10 @@ export function UserTable() {
         deleteUser(id);
         }
     };
+
+    const handleEdit = (id: string) => {
+        navigate(`/user/edit/${id}`)
+    }
 
     if (isLoading) {
         return <Typography sx={{padding: "50px 200px"}}variant="h3">Loading...</Typography>;
@@ -49,7 +54,7 @@ export function UserTable() {
                             <TableCell>{user.fullName}</TableCell>
                             <TableCell>
                                 <Button onClick={() => handleDelete(user.id)} disabled={isDeleting}><Delete/></Button>
-                                <Button><Edit/></Button>
+                                <Button onClick={() => handleEdit(user.id)}><Edit/></Button>
                             </TableCell>
                         </TableRow>
                     )

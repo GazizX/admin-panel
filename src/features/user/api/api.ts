@@ -1,6 +1,7 @@
 import User from "@entities/user/User";
 import axios from "axios";
 import { API_BASE_URL } from "@features/auth";
+import { UserCreateFormData } from "@shared/interfaces/UserFormData";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -10,8 +11,9 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const postUser = async (data: User): Promise<User> => {
-  const payload = { ...data, fullName: `${data.name} ${data.surName}` };
+export const postUser = async (data: UserCreateFormData): Promise<User> => {
+  const payload: Partial<UserCreateFormData> = { ...data };
+  delete payload.passwordConfirmation;
   const response = await api.post<User>('api/v1/users', payload);
   return response.data;
 };
@@ -22,7 +24,7 @@ export const getUsers = async(): Promise<User[]> => {
 }
 
 export const getUserById = async(id: string): Promise<User> => {
-    const response = await api.patch<User>(`api/v1/users/${id}`)
+    const response = await api.get<User>(`api/v1/users/${id}`)
     return response.data
 }
 

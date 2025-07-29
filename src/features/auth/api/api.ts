@@ -2,7 +2,7 @@ import Auth from "@entities/auth"
 import User from "@entities/user";
 import axios from "axios"
 
-export const API_BASE_URL = 'https://forms-server-ten.vercel.app'
+export const API_BASE_URL = 'https://forms-server-yfms.onrender.com'
 
 export interface LoginSuccessResponse {
   message: string

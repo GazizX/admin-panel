@@ -1,7 +1,5 @@
-// src/shared/validation/UserSchema.ts
 import * as yup from 'yup';
-
-// Единая схема, которая адаптируется
+/* Схема валидации формы редактирования/создания пользователя с помощь Yup*/
 const UserSchema = yup.object().shape({
     name: yup.string()
         .required('Имя обязательно')
@@ -11,7 +9,6 @@ const UserSchema = yup.object().shape({
         .required('Фамилия обязательна')
         .max(64, 'Фамилия не должна превышать 64 символа'),
 
-    // Email: обязателен для создания, не должен существовать в данных для PATCH
     email: yup.string().when('isCreating', {
         is: true,
         then: (schema) => schema
@@ -19,7 +16,6 @@ const UserSchema = yup.object().shape({
             .required('Email обязателен'),
     }),
 
-    // Пароль и подтверждение: обязательны только при создании
     password: yup.string().when('isCreating', {
         is: true,
         then: (schema) => schema

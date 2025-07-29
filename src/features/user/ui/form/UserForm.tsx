@@ -10,11 +10,12 @@ import UserSchema from "@shared/validation/formValidation";
 interface UserFormProps {
     isCreating: boolean;
     initialData?: User | UserCreateFormData;
-    onSubmit: (values: FormDataType, helpers: FormikHelpers<FormDataType>) => void | Promise<any>;
+    onSubmit: (values: FormDataType, helpers: FormikHelpers<FormDataType>) => void;
     isLoading?: boolean;
     error?: string | null;
 }
 
+/* Форма редактирование/создания пользователя */
 export function UserForm({ isCreating, initialData, onSubmit, isLoading = false, error = null }: UserFormProps) {
     const formInitialValues: FormDataType = {
         name: initialData?.name || '',
@@ -29,6 +30,10 @@ export function UserForm({ isCreating, initialData, onSubmit, isLoading = false,
     } as FormDataType
     return(
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* Универсальная форма: для создания используется UserCreateFormData,
+             для редактирования UserUpdateFormData (без email и password)
+             Реализовано с помощью приведения типов
+            */}
             <Formik
                 initialValues={formInitialValues}
                 validationSchema={UserSchema}
@@ -36,7 +41,6 @@ export function UserForm({ isCreating, initialData, onSubmit, isLoading = false,
                 onSubmit={(values, helpers) => {
                     let submissionValues: UserCreateFormData | UserUpdateFormData;
                     if (!isCreating) {
-                        // Для обновления: явно формируем объект типа UserUpdateFormData
                         submissionValues = {
                             name: values.name,
                             surName: values.surName,
@@ -45,25 +49,21 @@ export function UserForm({ isCreating, initialData, onSubmit, isLoading = false,
                             telephone: values.telephone,
                             employment: values.employment,
                             userAgreement: values.userAgreement,
-                            // Email, password, passwordConfirmation здесь не включаем,
-                            // так как бэкенд их не ожидает при PATCH
-                        } as UserUpdateFormData; // Явное приведение к типу UserUpdateFormData
+                        } as UserUpdateFormData;
                     } else {
-                        // Для создания: явно формируем объект типа UserCreateFormData
                         submissionValues = {
                             name: values.name,
                             surName: values.surName,
                             fullName: `${values.name} ${values.surName}`,
-                            email: (values as UserCreateFormData).email, // Приведение
-                            password: (values as UserCreateFormData).password, // Приведение
-                            passwordConfirmation: (values as UserCreateFormData).passwordConfirmation, // Приведение
+                            email: (values as UserCreateFormData).email,
+                            password: (values as UserCreateFormData).password,
+                            passwordConfirmation: (values as UserCreateFormData).passwordConfirmation,
                             birthDate: values.birthDate,
                             telephone: values.telephone,
                             employment: values.employment,
                             userAgreement: values.userAgreement,
-                        } as UserCreateFormData; // Явное приведение к типу UserCreateFormData
+                        } as UserCreateFormData;
                     }
-                    // Передаем очищенные значения в пропс onSubmit
                     onSubmit(submissionValues as FormDataType, helpers);
                 }}
                 enableReinitialize={true}
@@ -119,7 +119,6 @@ export function UserForm({ isCreating, initialData, onSubmit, isLoading = false,
                                     type="password"
                                     value={(values as UserCreateFormData).password}
                                     onChange={(e) => setFieldValue('password', e.target.value)}
-                                    // ИСПРАВЛЕНИЕ: Приведение типа для touched.password и errors.password
                                     error={(touched as FormikTouched<UserCreateFormData>).password && Boolean((errors as FormikErrors<UserCreateFormData>).password)}
                                     helperText={(touched as FormikTouched<UserCreateFormData>).password && (errors as FormikErrors<UserCreateFormData>).password}
                                 />
@@ -132,7 +131,6 @@ export function UserForm({ isCreating, initialData, onSubmit, isLoading = false,
                                     type="password"
                                     value={(values as UserCreateFormData).passwordConfirmation}
                                     onChange={(e) => setFieldValue('passwordConfirmation', e.target.value)}
-                                    // ИСПРАВЛЕНИЕ: Приведение типа для touched.passwordConfirmation и errors.passwordConfirmation
                                     error={(touched as FormikTouched<UserCreateFormData>).passwordConfirmation && Boolean((errors as FormikErrors<UserCreateFormData>).passwordConfirmation)}
                                     helperText={(touched as FormikTouched<UserCreateFormData>).passwordConfirmation && (errors as FormikErrors<UserCreateFormData>).passwordConfirmation}
                                 />

@@ -6,6 +6,7 @@ import { LoginPage, Layout, HomePage, CreatePage, EditPage } from '@pages/';
 import { $isAuthenticated, appStarted, getAuthUserFx } from '@features/auth/model';
 import { navigateTo } from '@features/user/model/users';
 
+/* Кастомизация цветов MaterialUI */
 const theme = createTheme({
   palette: {
     primary: {
@@ -23,6 +24,7 @@ function App() {
   const isCheckingAuth = useUnit(getAuthUserFx.pending)
   const navigate = useNavigate()
 
+  /* navigateTo - утилита из effector */
   useEffect(() => {
     return navigateTo.watch((path) => {
       navigate(path);
@@ -33,7 +35,7 @@ function App() {
     initApp();
   }, [initApp]);
 
-
+  /* логика перехода на главную страницу при авторизации */
   useEffect(() => {
     if (!isCheckingAuth) {
       if (isAuthenticated) {
@@ -45,6 +47,7 @@ function App() {
       }
     }
   }, [isAuthenticated, isCheckingAuth, navigate]);
+
   return (
     <>
     <ThemeProvider theme={theme}>

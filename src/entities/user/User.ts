@@ -1,3 +1,4 @@
+/* user DTO для /user */
 export default interface User {
     id: string,
     name: string,

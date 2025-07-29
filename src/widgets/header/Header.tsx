@@ -6,7 +6,7 @@ import { useUnit } from "effector-react";
 import { logoutFx } from "@features/auth/model";
 export function Header() {
     const logout = useUnit(logoutFx)
-
+    /* Обработка выхода из учетной записи */
     const handleLogout = () => {
         logout()
     }

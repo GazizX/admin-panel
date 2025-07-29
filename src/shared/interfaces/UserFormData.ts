@@ -1,3 +1,4 @@
+/* DTO для POST запроса */
 export interface UserCreateFormData {
     name: string;
     surName: string;
@@ -9,7 +10,7 @@ export interface UserCreateFormData {
     employment?: string;
     userAgreement: boolean;
 }
-
+/* DTO для PATCH запроса */
 export interface UserUpdateFormData {
     name?: string;
     surName?: string;
@@ -19,4 +20,5 @@ export interface UserUpdateFormData {
     userAgreement?: boolean;
 }
 
+/* Тип для универсальной формы UserForm.tsx */
 export type FormDataType = UserCreateFormData | UserUpdateFormData;

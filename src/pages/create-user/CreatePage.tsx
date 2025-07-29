@@ -10,26 +10,23 @@ export function CreatePage() {
 
     const handleSubmitCreate = async (values: FormDataType, helpers: FormikHelpers<FormDataType>) => {
         try {
-            // В режиме создания `values` всегда будет соответствовать `UserCreateFormData`.
-            // Приводим тип для соответствия ожидаемому аргументу `addUserFx`.
             await addUserFx(values as UserCreateFormData);
         } catch (error) {
             console.error('Ошибка создания пользователя:', error);
-            // Устанавливаем статус ошибки в Formik.
-            // Это может быть общая ошибка формы или специфичные ошибки полей.
-            helpers.setStatus({ message: (error as any)?.message || 'Произошла ошибка при создании пользователя.' });
         } finally {
-            helpers.setSubmitting(false); // Всегда сбрасываем состояние отправки Formik
+            /* Сбрасываем состояние Formik*/
+            helpers.setSubmitting(false);
         }
     };
 
+    /* Начальное (пустое) значение формы */
     const initialFormValues: UserCreateFormData = {
         name: '',
         surName: '',
         email: '',
         password: '',
         passwordConfirmation: '',
-        birthDate: undefined, // undefined для опциональных полей (или null, если DatePicker так ожидает)
+        birthDate: undefined,
         telephone: '',
         employment: '',
         userAgreement: false,
@@ -38,10 +35,10 @@ export function CreatePage() {
     return (
         <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 2 }}>
             <UserForm
-                isCreating={true} // Указываем, что это режим создания
-                initialData={initialFormValues} // Передаем пустые начальные значения
-                onSubmit={handleSubmitCreate} // Передаем обработчик отправки формы
-                isLoading={isAddingUser} // Передаем состояние загрузки в форму
+                isCreating={true}
+                initialData={initialFormValues}
+                onSubmit={handleSubmitCreate}
+                isLoading={isAddingUser}
             />
             {isAddingUser && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>

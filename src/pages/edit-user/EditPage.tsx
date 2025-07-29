@@ -8,9 +8,11 @@ import { useEffect } from "react";
 import { useParams} from "react-router";
 
 
+/* Страница редактирования пользователя */
 export function EditPage() {
     const { id } = useParams<{ id: string }>();
 
+    /* Данные, полученные с помощью effector */
     const editingUser = useUnit($editingUser);
     const isLoadingUser = useUnit(getUserByIdFx.pending);
     const isUpdating = useUnit(updateUserFx.pending);
@@ -18,6 +20,7 @@ export function EditPage() {
     const loadUser = useUnit(getUserByIdFx);
     const selectUser = useUnit($users.map(users => users.find(u => u.id === id)));
 
+    /* Подгружаем данные юзера при изменении id и других зависимостей */
     useEffect(() => {
         if (id) {
             if (selectUser) {
@@ -30,6 +33,7 @@ export function EditPage() {
         }
     }, [id, loadUser, selectUser, editingUser]);
 
+    /* Обработка обновления данных пользователя */
     const handleUpdateSubmit = async (values: FormDataType, helpers: FormikHelpers<FormDataType>) => {
         if (id) {
             try {
@@ -54,10 +58,9 @@ export function EditPage() {
     }
 
     if (!editingUser || editingUser.id !== id) {
-        
         return (
             <Box sx={{ mt: 4, textAlign: 'center' }}>
-                <Typography variant="h5" color="error">Loading...</Typography>
+                <Typography variant="h5" color="error">Error. Try again</Typography>
             </Box>
         );
     }

@@ -8,18 +8,23 @@ import { useUnit } from 'effector-react';
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
+/* Начальное значение формы */
 const initialValues: Auth = { email: '', password: '' }
-
+/* Форма авторизации */
 export function LoginForm() {
+    /* Данные от Effector */
     const isLoading = useUnit(loginFx.pending)
     const authError = useUnit($authError)
     const isAuthenticated = useUnit($isAuthenticated)
+
+    /* Логика перехода при авторизации */
     const navigate = useNavigate()
     useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
   }, [isAuthenticated, navigate]);
+
     return(
         <Formik
         initialValues={initialValues}

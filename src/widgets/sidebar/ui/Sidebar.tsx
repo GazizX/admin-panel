@@ -4,8 +4,8 @@ import styles from './SideBar.module.css'
 import { useNavigate } from "react-router";
 export function Sidebar() {
     const navigate = useNavigate()
+    /* переход на страницу формы создания пользователя */
     const handleAdd = () => {
-        console.log("нажал")
         navigate('/user/create')
     }
     return(

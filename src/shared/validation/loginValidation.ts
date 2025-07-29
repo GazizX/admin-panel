@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+/* Схема валидации формы авторизации с пломощью Yup */
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
         .email('Wrong email format')
